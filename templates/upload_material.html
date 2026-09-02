@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Upload Material</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <label>Title</label>
+        <input type="text" name="title" required>
+
+        <label>Description</label>
+        <textarea name="description" rows="4"></textarea>
+
+        <label>File</label>
+        <input type="file" name="file" required>
+
+        <button type="submit">Upload</button>
+    </form>
+{% endblock %}

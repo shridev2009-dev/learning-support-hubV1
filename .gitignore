@@ -1,0 +1,13 @@
+# Local configuration and runtime data
+.env
+learning_hub.db
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Uploaded runtime files
+static/uploads/*
+!static/uploads/.gitkeep

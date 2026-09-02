@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Teacher Dashboard</h2>
+    <p>Welcome, {{ session['name'] }}!</p>
+
+    <div class="dashboard-actions">
+        <a href="{{ url_for('upload_material') }}"><button>Upload New Material</button></a>
+        <a href="{{ url_for('teacher_quizzes') }}"><button>Manage Quizzes</button></a>
+    </div>
+
+    <h3>Your Uploaded Material</h3>
+    {% if materials %}
+        <ul>
+        {% for m in materials %}
+            <li>
+                <strong>{{ m.title }}</strong> — {{ m.description }}
+                <small>(uploaded {{ m.upload_date }})</small>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't uploaded any material yet.</p>
+    {% endif %}
+
+    <h3>Your Quizzes</h3>
+    {% if quizzes %}
+        <ul>
+        {% for q in quizzes %}
+            <li>
+                <strong>{{ q.title }}</strong>
+                {% if q.description %}<p>{{ q.description }}</p>{% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't created any quiz yet.</p>
+    {% endif %}
+{% endblock %}

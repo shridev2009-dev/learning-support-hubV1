@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Student Dashboard</h2>
+    <p>Welcome, {{ session['name'] }}!</p>
+
+    <div class="dashboard-actions">
+        <a href="{{ url_for('progress') }}"><button>View Progress</button></a>
+    </div>
+
+    <h3>Available Study Material</h3>
+    {% if materials %}
+        <ul>
+        {% for m in materials %}
+            <li>
+                <strong>{{ m.title }}</strong> — {{ m.description }}<br>
+                <a href="{{ url_for('static', filename='uploads/' + m.file_path.split('/')[-1]) }}" target="_blank">
+                    Download
+                </a>
+                <small>(uploaded {{ m.upload_date }})</small>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No material uploaded yet.</p>
+    {% endif %}
+
+    <h3>Available Quizzes</h3>
+    {% if quizzes %}
+        <ul>
+        {% for q in quizzes %}
+            <li>
+                <strong>{{ q.title }}</strong>
+                {% if q.description %}<p>{{ q.description }}</p>{% endif %}
+                <a href="{{ url_for('quiz_detail', quiz_id=q.quiz_id) }}">Take Quiz</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No quizzes available yet.</p>
+    {% endif %}
+
+    <h3>Progress Summary</h3>
+    <p><strong>Average score:</strong> {{ average }}%</p>
+    <p><strong>Correct answers:</strong> {{ total_score }} / {{ total_questions }}</p>
+    {% if attempts %}
+        <ul>
+        {% for a in attempts %}
+            <li>{{ a.title }} — {{ a.score }} / {{ a.total_questions }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No quiz attempts yet.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learning Support Hub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}"><strong>Learning Support Hub</strong></a>
+        <div>
+            {% if session.get('role') %}
+                {% if session['role'] == 'student' %}
+                    <a href="{{ url_for('student_dashboard') }}">Dashboard</a>
+                {% else %}
+                    <a href="{{ url_for('teacher_dashboard') }}">Dashboard</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout ({{ session['name'] }})</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

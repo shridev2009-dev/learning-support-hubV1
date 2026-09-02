@@ -1,0 +1,152 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #e8f1f5;
+    color: hwb(0 56% 21%);
+}
+
+nav {
+    background: #2c3e50;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav a {
+    color: rgb(91, 163, 174);
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 700px;
+    margin: 40px auto;
+    background: rgb(177, 168, 228);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input, select, textarea, button {
+    padding: 8px;
+    font-size: 15px;
+}
+
+button {
+    background: #675883;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.dashboard-actions a {
+    display: inline-block;
+    background: #0a2a4b;
+    color: white;
+    padding: 9px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.dashboard-actions a:hover {
+    background: #8dbeec;
+}
+
+button:hover {
+    background: #1a252f;
+}
+
+.flashes {
+    list-style: none;
+    padding: 10px;
+    background: #eaf3e2;
+    border-left: 4px solid #4caf50;
+    margin-bottom: 20px;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 12px;
+}
+
+.dashboard-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px 0 20px;
+}
+
+.progress-summary {
+    background: #f3f9ff;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.summary-label {
+    display: block;
+    color: #5f6b76;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+input[type="radio"] {
+    margin-right: 8px;
+}
+
+.muted {
+    color: #5f6b76;
+}
+
+.quiz-question {
+    font-size: 18px;
+    margin: 8px 0;
+}
+
+.quiz-form .answer-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f7f9fb;
+    border: 1px solid #dce3e9;
+    border-radius: 4px;
+    padding: 12px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.quiz-form .answer-option:hover {
+    background: #edf5fb;
+    border-color: #8bb7d4;
+}
+
+.quiz-form .answer-option input {
+    flex: 0 0 auto;
+}

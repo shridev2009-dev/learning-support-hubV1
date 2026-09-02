@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>My Progress</h2>
+
+    <div class="progress-summary">
+        <div><span class="summary-label">Average score</span><strong>{{ average }}%</strong></div>
+        <div><span class="summary-label">Correct answers</span><strong>{{ total_score }} / {{ total_questions }}</strong></div>
+    </div>
+
+    {% if attempts %}
+        <h3>Quiz History</h3>
+        <ul class="attempt-list">
+        {% for a in attempts %}
+            <li>
+                <strong>{{ a.title }}</strong> — {{ a.score }} / {{ a.total_questions }}
+                <small>({{ a.submitted_at }})</small>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't attempted any quiz yet.</p>
+    {% endif %}
+{% endblock %}
