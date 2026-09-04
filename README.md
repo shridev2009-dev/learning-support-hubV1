@@ -24,7 +24,8 @@ Then open your browser at: http://127.0.0.1:5000/
 
 ## 5. Login credentials
 - **Students**: Register via the Register page, then log in with that email/password.
-- **Teacher**: Use the built-in login —
+- **Teachers**: Register at `/teacher_register`, then log in with the new username and password.
+- **Demo teacher**: Use the built-in login —
   - Username: `teacher1`
   - Password: `teacher123`
   (You can change these in `app.py` at the top.)

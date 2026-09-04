@@ -48,6 +48,38 @@ def register():
     return render_template('register.html')
 
 
+# ---------- Teacher Registration ----------
+@app.route('/teacher_register', methods=['GET', 'POST'])
+def teacher_register():
+    if request.method == 'POST':
+        name = request.form['name']
+        username = request.form['username']
+        password = request.form['password']
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT teacher_id FROM teachers WHERE username = %s", (username,))
+        if cursor.fetchone():
+            flash("Username already registered. Please login.")
+            cursor.close()
+            conn.close()
+            return redirect(url_for('login'))
+
+        cursor.execute(
+            "INSERT INTO teachers (name, username, password) VALUES (%s, %s, %s)",
+            (name, username, password)
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        flash("Teacher registration successful. Please login.")
+        return redirect(url_for('login'))
+
+    return render_template('teacher_register.html')
+
+
 # ---------- Login (Student or Teacher) ----------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -55,10 +87,24 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        # Teacher login (hardcoded)
+        # Keep the original demo account available for local setup checks.
         if email == TEACHER_USERNAME and password == TEACHER_PASSWORD:
             session['role'] = 'teacher'
             session['name'] = 'Teacher'
+            return redirect(url_for('teacher_dashboard'))
+
+        # Teacher login (database account)
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM teachers WHERE username = %s AND password = %s", (email, password))
+        teacher = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        if teacher:
+            session['role'] = 'teacher'
+            session['teacher_id'] = teacher['teacher_id']
+            session['name'] = teacher['name']
             return redirect(url_for('teacher_dashboard'))
 
         # Student login (from database)
