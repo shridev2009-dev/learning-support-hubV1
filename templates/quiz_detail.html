@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>{{ quiz.title }}</h2>
+    {% if quiz.description %}<p class="muted">{{ quiz.description }}</p>{% endif %}
+
+    <form method="POST" class="quiz-form">
+        <p class="quiz-question"><strong>{{ question.question }}</strong></p>
+
+        <label class="answer-option"><input type="radio" name="answer" value="A" required> <span>A. {{ question.option_a }}</span></label>
+        <label class="answer-option"><input type="radio" name="answer" value="B"> <span>B. {{ question.option_b }}</span></label>
+        <label class="answer-option"><input type="radio" name="answer" value="C"> <span>C. {{ question.option_c }}</span></label>
+        <label class="answer-option"><input type="radio" name="answer" value="D"> <span>D. {{ question.option_d }}</span></label>
+
+        <button type="submit">Submit Answer</button>
+    </form>
+{% endblock %}
