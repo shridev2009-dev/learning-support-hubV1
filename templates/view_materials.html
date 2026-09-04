@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Study Materials{% endblock %}
+
+{% block content %}
+<h2>Study Materials</h2>
+
+{% if materials %}
+    {% for m in materials %}
+    <div class="material-block">
+        <h3>{{ m.title }} <span class="subject-tag">{{ m.subject }}</span></h3>
+        <p>{{ m.content }}</p>
+        <p><em>Uploaded by {{ m.uploaded_by }} on {{ m.upload_date }}</em></p>
+        <a href="{{ url_for('take_quiz', material_id=m.material_id) }}">Take Quiz on this module</a>
+    </div>
+    <hr>
+    {% endfor %}
+{% else %}
+    <p>No materials uploaded yet.</p>
+{% endif %}
+{% endblock %}

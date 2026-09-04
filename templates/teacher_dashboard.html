@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+<h2>Welcome, Teacher!</h2>
+<p>Manage learning materials and quizzes for your students.</p>
+
+<div class="card-links">
+    <a class="card" href="{{ url_for('upload_material') }}">
+        <h3>Upload Material</h3>
+        <p>Add a new study module for students.</p>
+    </a>
+    <a class="card" href="{{ url_for('add_quiz') }}">
+        <h3>Add Quiz</h3>
+        <p>Create quiz questions linked to a module.</p>
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ name }}!</h2>
+<p>Use the links below to access your learning resources.</p>
+
+<div class="card-links">
+    <a class="card" href="{{ url_for('view_materials') }}">
+        <h3>Study Materials</h3>
+        <p>Browse modules uploaded by your teacher.</p>
+    </a>
+    <a class="card" href="{{ url_for('progress') }}">
+        <h3>My Progress</h3>
+        <p>View your quiz scores and attempts.</p>
+    </a>
+</div>
+{% endblock %}

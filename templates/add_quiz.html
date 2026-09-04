@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Add Quiz{% endblock %}
+
+{% block content %}
+<h2>Add Quiz Question</h2>
+
+{% if materials %}
+<form method="POST" action="{{ url_for('add_quiz') }}">
+    <label for="material_id">Select Module:</label>
+    <select id="material_id" name="material_id" required>
+        {% for m in materials %}
+        <option value="{{ m.material_id }}">{{ m.title }} ({{ m.subject }})</option>
+        {% endfor %}
+    </select>
+
+    <label for="question">Question:</label>
+    <input type="text" id="question" name="question" required>
+
+    <label for="option_a">Option A:</label>
+    <input type="text" id="option_a" name="option_a" required>
+
+    <label for="option_b">Option B:</label>
+    <input type="text" id="option_b" name="option_b" required>
+
+    <label for="option_c">Option C:</label>
+    <input type="text" id="option_c" name="option_c" required>
+
+    <label for="option_d">Option D:</label>
+    <input type="text" id="option_d" name="option_d" required>
+
+    <label for="correct_answer">Correct Answer (A/B/C/D):</label>
+    <input type="text" id="correct_answer" name="correct_answer" maxlength="1" required>
+
+    <button type="submit">Add Question</button>
+</form>
+{% else %}
+    <p>Please upload a material first before adding quiz questions.</p>
+    <a href="{{ url_for('upload_material') }}">Upload Material</a>
+{% endif %}
+{% endblock %}

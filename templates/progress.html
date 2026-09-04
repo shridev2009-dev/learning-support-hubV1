@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}My Progress{% endblock %}
+
+{% block content %}
+<h2>My Progress</h2>
+
+{% if records %}
+<table>
+    <tr>
+        <th>Module</th>
+        <th>Question</th>
+        <th>Score</th>
+        <th>Date Attempted</th>
+    </tr>
+    {% for r in records %}
+    <tr>
+        <td>{{ r.title }}</td>
+        <td>{{ r.question }}</td>
+        <td>{{ r.score }}</td>
+        <td>{{ r.date_attempted }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+    <p>You haven't attempted any quizzes yet.</p>
+{% endif %}
+{% endblock %}

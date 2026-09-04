@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to the Learning Support Hub</h1>
+<p>A platform where students can access study materials, take quizzes, and track their progress.</p>
+
+{% if not session.get('role') %}
+<p>
+    <a href="{{ url_for('login') }}">Login</a> or
+    <a href="{{ url_for('register') }}">Register</a> to get started.
+</p>
+{% endif %}
+{% endblock %}
