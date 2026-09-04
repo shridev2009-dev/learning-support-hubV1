@@ -13,7 +13,7 @@ CREATE TABLE student (
     class VARCHAR(20)
 );
 
--- Teacher table
+ -- Teacher table
 CREATE TABLE teachers (
     teacher_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
