@@ -9,10 +9,11 @@ pip install flask mysql-connector-python
 ## 2. Set up the database
 1. Open MySQL (Workbench or command line).
 2. Run the contents of `schema.sql` — this creates the `learning_hub` database
-   and the four tables: `student`, `material`, `quiz`, `progress`.
+  and the five tables: `student`, `teachers`, `material`, `quiz`, `progress`.
 
 ## 3. Configure database connection
-Open `db.py` and replace `"your_mysql_password"` with your actual MySQL root password.
+Copy `.env.example` to `.env` and set the MySQL connection values for your local
+database. The application loads these values automatically.
 
 ## 4. Run the app
 From inside the `learning_hub` folder:
@@ -23,7 +24,7 @@ Then open your browser at: http://127.0.0.1:5000/
 
 ## 5. Login credentials
 - **Students**: Register via the Register page, then log in with that email/password.
-- **Teacher**: Use the hardcoded login —
+- **Teacher**: Use the built-in login —
   - Username: `teacher1`
   - Password: `teacher123`
   (You can change these in `app.py` at the top.)
@@ -47,6 +48,7 @@ learning_hub/
 - Passwords are stored as plain text for simplicity — this is acceptable for a
   Class 12 board project. If you want to add password hashing, ask and it can
   be added using `werkzeug.security`.
-- Teacher login is hardcoded (no teacher table) as per your project design.
+- Teacher login currently uses the built-in credentials above. The `teachers`
+  table is available for future database-backed teacher accounts.
 - Foreign keys are used between `material` → `quiz` → `progress` → `student`,
   which you can highlight in your viva as good relational design.
