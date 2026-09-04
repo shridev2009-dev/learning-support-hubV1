@@ -1,8 +1,21 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+import mysql.connector
+
 from db import get_connection
 
 app = Flask(__name__)
 app.secret_key = "replace_with_any_random_string"
+
+
+@app.errorhandler(mysql.connector.Error)
+def handle_database_error(error):
+    endpoint = request.endpoint or 'login'
+    destination = 'teacher_register' if endpoint == 'teacher_register' else endpoint
+    if destination not in {'register', 'teacher_register', 'login'}:
+        destination = 'login'
+    flash("Database connection failed. Copy .env.example to .env and enter your MySQL password.")
+    app.logger.error("Database error: %s", error)
+    return redirect(url_for(destination))
 
 # Hardcoded teacher credentials
 TEACHER_USERNAME = "teacher1"
