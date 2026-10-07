@@ -200,3 +200,29 @@ table th {
 table td {
 	background: rgba(255, 255, 255, 0.15);
 }
+
+.table-wrap {
+	overflow-x: auto;
+}
+
+.admin-edit-form {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(120px, 1fr)) auto;
+	gap: 8px;
+	align-items: center;
+}
+
+.admin-edit-form input,
+.admin-edit-form button {
+	margin: 0;
+}
+
+.danger-button {
+	background: rgba(150, 20, 40, 0.75);
+}
+
+@media (max-width: 800px) {
+	.admin-edit-form {
+		grid-template-columns: 1fr;
+	}
+}

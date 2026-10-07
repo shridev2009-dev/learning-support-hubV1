@@ -1,10 +1,29 @@
+import os
+import secrets
+
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import mysql.connector
 
 from db import get_connection
 
 app = Flask(__name__)
-app.secret_key = "replace_with_any_random_string"
+app.secret_key = os.getenv("FLASK_SECRET_KEY") or secrets.token_hex(32)
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
+
+
+def admin_csrf_token():
+    token = session.get("_csrf_token")
+    if not token:
+        token = secrets.token_urlsafe(32)
+        session["_csrf_token"] = token
+    return token
+
+
+def valid_admin_csrf_token():
+    submitted_token = request.form.get("csrf_token", "")
+    session_token = session.get("_csrf_token", "")
+    return bool(session_token) and secrets.compare_digest(submitted_token, session_token)
 
 
 @app.errorhandler(mysql.connector.Error)
@@ -100,6 +119,17 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
+        if (
+            ADMIN_USERNAME
+            and ADMIN_PASSWORD
+            and secrets.compare_digest(email, ADMIN_USERNAME)
+            and secrets.compare_digest(password, ADMIN_PASSWORD)
+        ):
+            session.clear()
+            session['role'] = 'admin'
+            session['name'] = 'Administrator'
+            return redirect(url_for('admin_students'))
+
         # Keep the original demo account available for local setup checks.
         if email == TEACHER_USERNAME and password == TEACHER_PASSWORD:
             session['role'] = 'teacher'
@@ -185,6 +215,96 @@ def teacher_dashboard():
     if session.get('role') != 'teacher':
         return redirect(url_for('login'))
     return render_template('teacher_dashboard.html')
+
+
+# ---------- Admin: Manage student registrations ----------
+@app.route('/admin/students')
+def admin_students():
+    if session.get('role') != 'admin':
+        return redirect(url_for('login'))
+
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(
+        "SELECT student_id, name, email, `class` FROM student ORDER BY student_id DESC"
+    )
+    students = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template(
+        'admin_students.html',
+        students=students,
+        csrf_token=admin_csrf_token()
+    )
+
+
+@app.route('/admin/students/<int:student_id>/update', methods=['POST'])
+def admin_update_student(student_id):
+    if session.get('role') != 'admin':
+        return redirect(url_for('login'))
+    if not valid_admin_csrf_token():
+        flash("The form expired or could not be verified. Please try again.")
+        return redirect(url_for('admin_students'))
+
+    name = request.form.get('name', '').strip()
+    email = request.form.get('email', '').strip()
+    student_class = request.form.get('class', '').strip()
+    if not name or not email or not student_class:
+        flash("Name, email, and class are required.")
+        return redirect(url_for('admin_students'))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT student_id FROM student WHERE email = %s AND student_id <> %s",
+        (email, student_id)
+    )
+    if cursor.fetchone():
+        cursor.close()
+        conn.close()
+        flash("That email address is already used by another student.")
+        return redirect(url_for('admin_students'))
+
+    cursor.execute(
+        "UPDATE student SET name = %s, email = %s, `class` = %s WHERE student_id = %s",
+        (name, email, student_class, student_id)
+    )
+    if cursor.rowcount == 0:
+        cursor.execute("SELECT student_id FROM student WHERE student_id = %s", (student_id,))
+        if cursor.fetchone():
+            conn.commit()
+            cursor.close()
+            conn.close()
+            flash("Student registration updated.")
+            return redirect(url_for('admin_students'))
+        cursor.close()
+        conn.close()
+        flash("Student record not found.")
+        return redirect(url_for('admin_students'))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    flash("Student registration updated.")
+    return redirect(url_for('admin_students'))
+
+
+@app.route('/admin/students/<int:student_id>/delete', methods=['POST'])
+def admin_delete_student(student_id):
+    if session.get('role') != 'admin':
+        return redirect(url_for('login'))
+    if not valid_admin_csrf_token():
+        flash("The form expired or could not be verified. Please try again.")
+        return redirect(url_for('admin_students'))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM student WHERE student_id = %s", (student_id,))
+    deleted = cursor.rowcount
+    conn.commit()
+    cursor.close()
+    conn.close()
+    flash("Student registration deleted." if deleted else "Student record not found.")
+    return redirect(url_for('admin_students'))
 
 
 # ---------- Teacher: Upload Material ----------
