@@ -155,6 +155,30 @@ def student_dashboard():
     return render_template('student_dashboard.html', name=session['name'])
 
 
+# ---------- Student: Available Quizzes ----------
+@app.route('/quizzes')
+def quizzes():
+    if session.get('role') != 'student':
+        return redirect(url_for('login'))
+
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT m.material_id, m.title, m.subject,
+               (SELECT COUNT(*) FROM quiz q WHERE q.material_id = m.material_id) AS question_count
+        FROM material m
+        WHERE EXISTS (
+            SELECT 1 FROM quiz q WHERE q.material_id = m.material_id
+        )
+        ORDER BY m.upload_date DESC
+    """)
+    materials = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return render_template('quizzes.html', materials=materials)
+
+
 # ---------- Teacher Dashboard ----------
 @app.route('/teacher_dashboard')
 def teacher_dashboard():
