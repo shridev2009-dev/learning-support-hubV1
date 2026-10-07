@@ -1,5 +1,8 @@
 # Learning Support Hub — Setup Instructions
 
+## Live app
+The deployed app is hosted on Render: https://learning-support-hubv1.onrender.com/
+
 ## 1. Requirements
 Install Flask and MySQL connector:
 ```
