@@ -16,6 +16,8 @@ Copy `.env.example` to `.env` and set the MySQL connection values for your local
 database. Set a private `FLASK_SECRET_KEY`, `ADMIN_USERNAME`, and
 `ADMIN_PASSWORD` in `.env` as well; change the example admin password before
 using the app. The application loads these values automatically.
+For hosted MySQL providers, use their supplied host and port; set the matching
+`MYSQL_HOST` and `MYSQL_PORT` values in your deployment environment.
 
 ## 4. Run the app
 From inside the `learning_hub` folder:
